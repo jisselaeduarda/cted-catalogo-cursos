@@ -1,0 +1,21 @@
+
+# Arquivos gerados pelo .NET
+bin/
+obj/
+
+# Banco de dados local
+*.db
+*.db-shm
+*.db-wal
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+secrets.json
+
+# Arquivos do sistema e editor
+.vs/
+.vscode/
+.DS_Store
+Thumbs.db

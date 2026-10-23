@@ -1,0 +1,6 @@
+@CTED.CatalogoCursos__HostAddress = http://localhost:5046
+
+GET {{CTED.CatalogoCursos__HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
