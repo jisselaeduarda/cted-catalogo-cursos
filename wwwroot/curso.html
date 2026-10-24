@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Confira os detalhes, conteúdo e informações do curso SESI + Indústria.">
+  <meta name="theme-color" content="#b30812">
+  <title>Detalhes do curso | SESI + Indústria</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/curso.js" defer></script>
+</head>
+<body class="course-detail-body">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/index.html#inicio" aria-label="SESI + Indústria, início">
+        <img src="/assets/images/logo-sesi-industria-primary.svg" alt="SESI + Indústria">
+      </a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menu">☰</button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegação principal">
+        <a href="/index.html#inicio">Início</a>
+        <a href="/index.html#cursos">Cursos</a>
+        <a href="/index.html#sobre">Sobre</a>
+        <a class="nav-cta" href="/index.html#cursos">Área do aluno <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo" class="course-detail-main">
+    <div id="course-detail-root" class="detail-page" aria-live="polite" aria-busy="true">
+      <p class="state-message">Carregando os detalhes do curso...</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-wrap footer-grid">
+      <div class="footer-brand">
+        <img src="/assets/images/logo-sesi-industria-white.svg" alt="SESI + Indústria">
+        <p>Conhecimento que fortalece pessoas, empresas e a indústria brasileira.</p>
+      </div>
+      <div class="footer-column"><h2>Navegação</h2><a href="/index.html#inicio">Início</a><a href="/index.html#cursos">Cursos</a><a href="/index.html#sobre">Sobre</a></div>
+      <div class="footer-column"><h2>Explore</h2><a href="/index.html#cursos">Catálogo de cursos</a><a href="/index.html#sobre">Benefícios</a></div>
+      <div class="footer-column"><h2>Informações</h2><span>Plataforma de cursos</span><span>SESI + Indústria</span><span>Aprendizagem contínua</span></div>
+    </div>
+    <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> SESI + Indústria</span><span>Educação que transforma.</span></div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

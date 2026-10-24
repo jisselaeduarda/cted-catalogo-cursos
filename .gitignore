@@ -19,3 +19,4 @@ secrets.json
 .vscode/
 .DS_Store
 Thumbs.db
+wwwroot/js/app.js~
