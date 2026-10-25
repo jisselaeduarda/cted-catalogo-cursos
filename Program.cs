@@ -1,76 +1,44 @@
-using CTED.CatalogoCursos.Services;
 using CTED.CatalogoCursos.Data;
+using CTED.CatalogoCursos.Endpoints;
+using CTED.CatalogoCursos.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Configuração da documentação da API.
 builder.Services.AddOpenApi();
+
+// Configuração do banco SQLite.
 builder.Services.AddDbContext<CursoDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString("ConexaoCursos")));
 
+// Registro dos serviços.
 builder.Services.AddScoped<CursoService>();
 
 var app = builder.Build();
+
+// Aplica as migrações e cadastra os cursos iniciais.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CursoDbContext>();
+
     db.Database.Migrate();
 
     await CursoDadosIniciais.InserirCursosAsync(db);
 }
-// Configure the HTTP request pipeline.
 
+// Disponibiliza a documentação no ambiente de desenvolvimento.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+// Disponibiliza os arquivos do frontend em wwwroot.
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGet("/api/cursos", async (
-    [Microsoft.AspNetCore.Mvc.FromServices] CursoService service,
-    string? busca,
-    string? categoria,
-    string? modalidade,
-    string? status) =>
-{
-    var cursos = await service.ListarTodosAsync(
-        busca,
-        categoria,
-        modalidade,
-        status);
-
-    return Results.Ok(cursos);
-});
-
-
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+// Registra as rotas da API em um arquivo separado.
+app.MapCursoEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
