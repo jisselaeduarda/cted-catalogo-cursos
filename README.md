@@ -1,42 +1,44 @@
-
 # CTED — Catálogo de Cursos
 
-Aplicação web para consulta e exploração de cursos de qualificação profissional voltados à indústria, desenvolvida para o desafio SESI Developer Systems I.
+Aplicação web desenvolvida para o desafio de Desenvolvedor de Sistemas I, com foco na consulta e exploração de cursos de qualificação profissional voltados à indústria.
 
-## Objetivo
+## Tecnologias
 
-Disponibilizar um catálogo de cursos que permita ao usuário pesquisar, filtrar e consultar informações sobre as formações oferecidas.
-
-## Tecnologias utilizadas
-
-### Frontend
-- HTML5.
-- CSS3.
-- JavaScript.
-- Layout responsivo.
-- Recursos de acessibilidade, incluindo rótulos nos campos, navegação por teclado e mensagens de atualização de resultados.
-
-### Backend
-- C#.
-- ASP.NET Core.
-- API REST.
-- Entity Framework Core.
-
-### Banco de dados
+- C# e .NET 10.
+- ASP.NET Core Minimal APIs.
+- Entity Framework Core 10.
 - SQLite.
-- Migrations do Entity Framework Core para criação e atualização da estrutura do banco.
-- Dados iniciais para demonstração.
+- HTML5, CSS3 e JavaScript.
+- Git e GitHub.
 
-## Arquitetura do projeto
+## Arquitetura
 
-A aplicação está organizada em camadas para separar as responsabilidades:
+O projeto separa a aplicação em camadas:
 
-- **Models:** representação dos dados dos cursos.
-- **Data:** contexto do banco de dados e dados iniciais.
-- **Services:** lógica relacionada à consulta dos cursos.
-- **Program.cs:** configuração da aplicação, serviços, banco de dados e endpoints.
-- **wwwroot:** arquivos estáticos do frontend.
-- **Migrations:** histórico de alterações na estrutura do banco de dados.
+- `Models/`: modelos de curso, módulo e aula.
+- `Data/`: contexto do banco SQLite e cadastro inicial dos cursos.
+- `Services/`: consultas, filtros e carregamento dos dados relacionados.
+- `Endpoints/`: rotas HTTP da API.
+- `Migrations/`: histórico de alterações do banco de dados.
+- `wwwroot/`: frontend, páginas, estilos, scripts e recursos visuais.
+- `Program.cs`: configuração e inicialização da aplicação.
+- `appsettings.json`: configuração da conexão com o banco.
+- `USO_DE_IA.md`: documentação sobre o uso de inteligência artificial.
+
+## Funcionalidades
+
+- Listagem de cursos.
+- Pesquisa por nome.
+- Filtros por categoria, modalidade e status.
+- Combinação de filtros.
+- Exibição da quantidade de resultados.
+- Limpeza dos filtros.
+- Página de detalhes do curso.
+- Exibição de carga horária, modalidade, status e público-alvo.
+- Estrutura de dados para módulos e aulas.
+- Navegação por carrossel.
+- Mensagens para resultados vazios e falhas de consulta.
+- Interface responsiva.
 
 ## Estrutura de pastas
 
@@ -45,110 +47,79 @@ CTED.CatalogoCursos/
 ├── Data/
 │   ├── CursoDbContext.cs
 │   └── CursoDadosIniciais.cs
+├── Endpoints/
+│   └── CursoEndpoints.cs
+├── Migrations/
 ├── Models/
-│   └── Cursos.cs
+│   ├── Cursos.cs
+│   ├── Modulo.cs
+│   └── Aula.cs
 ├── Services/
 │   └── CursoService.cs
-├── Migrations/
+├── Properties/
 ├── wwwroot/
+│   ├── assets/
+│   ├── css/
 │   ├── images/
+│   ├── js/
 │   ├── index.html
+│   ├── curso.html
 │   └── style.css
 ├── Program.cs
+├── CTED.CatalogoCursos.csproj
 ├── appsettings.json
+├── cursos.db
 ├── README.md
-├── USO_DE_IA.md
-└── cursos.db
+└── USO_DE_IA.md
 ```
 
-A estrutura pode conter outros arquivos auxiliares gerados pelo .NET e pelo Entity Framework Core.
+A listagem acima representa a estrutura principal do projeto. Alguns arquivos auxiliares podem existir conforme a configuração local.
 
-## Funcionalidades implementadas
-
-- Listagem de cursos.
-- Pesquisa por nome.
-- Filtro por categoria.
-- Filtro por modalidade.
-- Filtro por status.
-- Combinação dos filtros.
-- Exibição da quantidade de resultados.
-- Limpeza dos filtros.
-- Exibição dos detalhes de cada curso.
-- Navegação pelo catálogo com setas de carrossel.
-- Mensagem quando nenhum curso é encontrado.
-- Tratamento de falha na consulta à API.
-- Interface adaptável a computadores, tablets e celulares.
-
-## Dados dos cursos
-
-O catálogo utiliza seis cursos fictícios distribuídos entre três categorias, duas modalidades e três status.
-
-As informações apresentadas incluem nome completo, nome resumido, descrição, categoria, modalidade, carga horária, público-alvo e status.
-
-Os cursos e seus dados iniciais são utilizados exclusivamente para demonstrar o funcionamento da aplicação.
-
-## Como executar localmente
+## Como executar
 
 ### Pré-requisitos
 
-- .NET SDK compatível com o projeto (.NET 10).
-- Terminal ou Visual Studio Code.
-- Entity Framework Core Tools, caso seja necessário executar migrations manualmente.
+- .NET SDK 10.
+- Entity Framework Core Tools para operações manuais de migração.
 
-### 1. Abrir a pasta do projeto
-
-Entre no diretório `CTED.CatalogoCursos`.
-
-### 2. Restaurar as dependências
+### Restaurar dependências
 
 ```bash
 dotnet restore
 ```
 
-### 3. Compilar o projeto
+### Compilar
 
 ```bash
 dotnet build
 ```
 
-### 4. Executar a aplicação
+### Executar
 
 ```bash
 dotnet run --urls http://localhost:5046
 ```
 
-Abra no navegador:
+Acesse `http://localhost:5046`.
 
-http://localhost:5046
-
-A aplicação utiliza SQLite. Confira a connection string em `appsettings.json` para verificar onde o arquivo do banco de dados será criado.
-
-A inicialização da aplicação está configurada para aplicar as migrations e preparar os dados iniciais.
+Na inicialização, a aplicação aplica as migrações pendentes e prepara os dados iniciais quando necessário.
 
 ## API
 
-### Listar cursos
+### Listar e filtrar cursos
 
 ```http
 GET /api/cursos
 ```
 
-Exemplo:
-
-```http
-GET /api/cursos?categoria=Tecnologia
-```
-
-### Parâmetros de consulta
+Parâmetros opcionais:
 
 | Parâmetro | Finalidade |
 |---|---|
-| `busca` | Pesquisa por nome do curso |
+| `busca` | Pesquisa pelo nome completo ou resumido |
 | `categoria` | Filtra por categoria |
 | `modalidade` | Filtra por modalidade |
 | `status` | Filtra por status |
-
-Os parâmetros podem ser combinados na mesma requisição.
 
 Exemplo:
 
@@ -156,65 +127,73 @@ Exemplo:
 GET /api/cursos?categoria=Tecnologia&modalidade=Online
 ```
 
-A API retorna os cursos que correspondem aos filtros informados.
+### Consultar detalhes de um curso
+
+```http
+GET /api/cursos/{id}
+```
+
+Exemplo:
+
+```http
+GET /api/cursos/1
+```
+
+Retorna os dados do curso e os módulos e aulas relacionados, quando cadastrados. Se o ID não existir, a API retorna `404 Not Found`.
 
 ## Banco de dados
 
-O projeto utiliza SQLite por meio do Entity Framework Core.
+O projeto utiliza SQLite e Entity Framework Core.
 
-As migrations registram as alterações estruturais do banco. Os dados iniciais são preparados pela rotina de inicialização da aplicação.
+A conexão configurada em `appsettings.json` aponta para `cursos.db`. As migrações registram as alterações na estrutura do banco.
 
-Para consultar as migrations disponíveis:
+Para consultar as migrações:
 
 ```bash
 dotnet ef migrations list
 ```
 
-Para aplicar migrations manualmente, quando necessário:
+Para aplicar migrações pendentes:
 
 ```bash
 dotnet ef database update
 ```
 
-Execute esses comandos na pasta que contém o arquivo do projeto `.csproj`.
+Execute os comandos na pasta que contém `CTED.CatalogoCursos.csproj`.
 
-## Responsividade e acessibilidade
+Antes de fazer alterações no banco, mantenha uma cópia de segurança do arquivo SQLite.
 
-A interface adapta a quantidade de cartões exibidos conforme a largura da tela.
+## Dados e limitações
 
-Os campos possuem rótulos associados, os cartões podem ser acessados pelo teclado e as mensagens de resultado utilizam regiões de atualização acessíveis.
+O catálogo contém seis cursos fictícios para demonstração. Os resumos cadastrados são:
 
-## Imagens
+- Introdução à Indústria 4.0.
+- Fundamentos de Segurança do Trabalho.
+- Excel Aplicado à Produção.
+- Automação de Processos Industriais.
+- Gestão da Qualidade Industrial.
+- Boas Práticas de Manutenção.
 
-Os recursos visuais utilizados são os arquivos existentes no material disponibilizado para o projeto.
+Os dados apresentados não representam uma oferta oficial de cursos do SESI. Os módulos e as aulas devem ser preenchidos com conteúdo validado antes de serem apresentados como conteúdo programático real.
 
-Como não foram identificadas imagens individuais para todos os cursos, imagens gerais do material institucional são reutilizadas por categoria. Elas não devem ser interpretadas como fotografias específicas de cada formação.
+As imagens disponíveis são recursos visuais do projeto e podem ser ilustrativas, não fotografias específicas de cada curso.
 
-## Testes realizados
+A aplicação não possui painel administrativo de CRUD nem integração de matrícula online.
 
-- Compilação com `dotnet build`: concluída com sucesso.
-- Consulta da lista de cursos pela API.
-- Teste de filtro por categoria.
-- Teste de filtros combinados.
-- Teste de pesquisa por nome.
-- Teste de filtro por status.
-- Verificação da disposição dos cartões em três colunas no computador.
-- Teste dos filtros e da interface em viewport de celular.
-- Teste de abertura dos detalhes e retorno ao catálogo.
+## Validação realizada
 
-## Limitações conhecidas
+- `dotnet build`: concluído com sucesso.
+- `GET /api/cursos`: retornou `HTTP 200` e os seis cursos.
+- `GET /api/cursos/1`: retornou `HTTP 200` com os dados do curso.
 
-- As imagens individuais de cada curso não estão disponíveis no material identificado; são usadas imagens institucionais genéricas.
-- A publicação em um ambiente acessível pela internet ainda precisa ser configurada e validada.
-- O CRUD administrativo não faz parte do escopo implementado.
-- A disponibilidade de cada curso é apresentada pelo status cadastrado; datas específicas devem ser informadas quando aplicáveis.
+A validação visual completa, a publicação e os demais requisitos devem ser conferidos antes da entrega final.
 
-## Publicação
+## Repositório e publicação
 
-**Repositório GitHub:** preencher após confirmar a URL do repositório.
+Repositório GitHub: https://github.com/jisselaeduarda/cted-catalogo-cursos
 
-**Aplicação publicada:** preencher após realizar e testar a publicação.
+Endereço da aplicação publicada: pendente de configuração e validação.
 
 ## Uso de inteligência artificial
 
-As ferramentas, sugestões aproveitadas, correções e validações realizadas com auxílio de inteligência artificial estão documentadas em [`USO_DE_IA.md`](USO_DE_IA.md).
+O uso de ferramentas de IA durante o desenvolvimento, incluindo exemplos de solicitações, ajustes e validações, está documentado em `USO_DE_IA.md`.
