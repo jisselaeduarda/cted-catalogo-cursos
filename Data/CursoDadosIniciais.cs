@@ -1,4 +1,3 @@
-
 using CTED.CatalogoCursos.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +7,24 @@ public static class CursoDadosIniciais
 {
     public static async Task InserirCursosAsync(CursoDbContext db)
     {
+        // Se os cursos já existem, preserva os registros e corrige
+        // somente o status que foi identificado como inconsistente.
         if (await db.Cursos.AnyAsync())
         {
+            var cursoManutencao = await db.Cursos.FirstOrDefaultAsync(
+                curso => curso.NomeCompleto == "Boas Práticas de Manutenção");
+
+            if (cursoManutencao is not null &&
+                cursoManutencao.Status == "Embreve")
+            {
+                cursoManutencao.Status = "Em breve";
+                await db.SaveChangesAsync();
+            }
+
             return;
         }
 
+        // Cadastro inicial dos seis cursos fictícios do catálogo.
         var cursos = new List<Curso>
         {
             new()
