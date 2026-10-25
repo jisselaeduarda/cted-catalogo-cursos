@@ -23,4 +23,6 @@ public class Curso
     public string ImagemUrl { get; set; } = string.Empty;
 
     public DateTime? DataDisponibilidade { get; set; }
+
+    public List<Modulo> Modulos { get; set; } = new();
 }

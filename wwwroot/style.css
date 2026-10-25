@@ -505,3 +505,338 @@ header p {
         padding: 18px;
     }
 }
+/* Chamada final do curso conforme o PDF */
+.course-final-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 42px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 44px max(24px, min(150px, calc((100vw - 1160px) / 2)));
+  min-height: 330px;
+  background: #8b0000;
+  color: #fff;
+}
+
+.course-final-content {
+  max-width: 500px;
+}
+
+.course-final-content .eyebrow {
+  color: #fcd29b;
+}
+
+.course-final-content h2 {
+  margin: 0 0 16px;
+  font-size: clamp(29px, 3.5vw, 43px);
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.course-final-content > p:not(.eyebrow) {
+  margin: 0 0 22px;
+  color: rgba(255,255,255,.88);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.course-final-media {
+  position: relative;
+  min-width: 0;
+  height: 230px;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.course-final-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.course-final-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding-left: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #b40b16;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.course-final-play:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.course-final-play:focus-visible {
+  outline: 3px solid #f0a13a;
+  outline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .course-final-cta {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 38px 18px;
+  }
+
+  .course-final-media {
+    height: 210px;
+  }
+}
+/* Detalhes do curso — alinhamento ao protótipo SESI + Indústria */
+.course-detail-columns {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: 56px;
+  align-items: start;
+  padding: 28px 0 48px;
+}
+
+.course-about {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.course-accordion-column {
+  min-width: 0;
+}
+
+.course-accordion-column .detail-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.course-accordion-column .detail-section {
+  padding: 16px 0;
+}
+
+.course-accordion-column .detail-section h2 {
+  font-size: 16px;
+}
+
+.course-accordion-column .course-accordion {
+  border: 0;
+  border-bottom: 1px solid #ded8d5;
+  border-radius: 0;
+  background: transparent;
+}
+
+.course-accordion-column .course-accordion > summary {
+  padding: 16px 2px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.course-accordion-column .course-accordion > summary::after {
+  content: '+';
+  float: right;
+  font-size: 21px;
+  font-weight: 400;
+}
+
+.course-accordion-column .course-accordion[open] > summary::after {
+  content: '−';
+}
+
+.course-testimonials {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 50px max(24px, calc((100vw - 1160px) / 2)) 68px;
+  background: #fcd29b;
+  color: #0b0b0b;
+}
+
+.course-testimonials-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.course-testimonials-heading .eyebrow {
+  color: #8b0000;
+}
+
+.course-testimonials-heading h2 {
+  margin: 0;
+  font-size: clamp(29px, 3vw, 39px);
+  line-height: 1.1;
+}
+
+.course-review-rail {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px 2px 18px;
+}
+
+.course-review-rail .review-card {
+  flex: 0 0 240px;
+  min-height: 250px;
+  padding: 22px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #171515;
+  scroll-snap-align: start;
+  box-shadow: 0 6px 20px #40201012;
+}
+
+.course-review-rail .review-person {
+  margin-top: auto;
+}
+
+.course-final-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 42px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 44px max(24px, calc((100vw - 1160px) / 2));
+  background: #8b0000;
+  color: #fff;
+}
+
+.course-final-content {
+  max-width: 500px;
+}
+
+.course-final-content .eyebrow {
+  color: #fcd29b;
+}
+
+.course-final-content h2 {
+  margin: 0 0 16px;
+  font-size: clamp(30px, 3.5vw, 43px);
+  line-height: 1.08;
+}
+
+.course-final-content > p:not(.eyebrow) {
+  margin-bottom: 22px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.course-final-media {
+  position: relative;
+  min-width: 0;
+  height: 230px;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.course-final-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.course-final-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding-left: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #b40b16;
+  cursor: pointer;
+}
+
+.sticky-enroll-bar {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(1080px, calc(100% - 40px));
+  padding: 13px 16px 13px 22px;
+  border-radius: 12px;
+  background: #0b0b0b;
+  color: #fff;
+  box-shadow: 0 8px 28px #0004;
+}
+
+.sticky-enroll-bar strong {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.sticky-enroll-bar .button {
+  flex: none;
+}
+
+.course-detail-body {
+  padding-bottom: 86px;
+}
+
+@media (max-width: 760px) {
+  .course-detail-columns {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .course-testimonials {
+    padding: 38px 18px 48px;
+  }
+
+  .course-testimonials-heading {
+    align-items: flex-end;
+  }
+
+  .course-review-rail .review-card {
+    flex-basis: 78vw;
+    max-width: 300px;
+  }
+
+  .course-final-cta {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 38px 18px;
+  }
+
+  .course-final-media {
+    height: 210px;
+  }
+
+  .sticky-enroll-bar {
+    bottom: 8px;
+    width: calc(100% - 16px);
+    padding: 9px 10px;
+    gap: 10px;
+  }
+
+  .sticky-enroll-bar strong {
+    font-size: 10px;
+  }
+
+  .sticky-enroll-bar .button {
+    font-size: 10px;
+    min-height: 36px;
+    padding: 8px 10px;
+  }
+}

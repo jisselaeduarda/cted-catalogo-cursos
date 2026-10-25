@@ -17,6 +17,33 @@ namespace CTED.CatalogoCursos_.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Aula", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ModuloId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Ordem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuloId");
+
+                    b.ToTable("Aulas");
+                });
+
             modelBuilder.Entity("CTED.CatalogoCursos.Models.Curso", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +91,57 @@ namespace CTED.CatalogoCursos_.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cursos");
+                });
+
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Modulo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CursoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Ordem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
+
+                    b.ToTable("Modulos");
+                });
+
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Aula", b =>
+                {
+                    b.HasOne("CTED.CatalogoCursos.Models.Modulo", null)
+                        .WithMany("Aulas")
+                        .HasForeignKey("ModuloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Modulo", b =>
+                {
+                    b.HasOne("CTED.CatalogoCursos.Models.Curso", null)
+                        .WithMany("Modulos")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Curso", b =>
+                {
+                    b.Navigation("Modulos");
+                });
+
+            modelBuilder.Entity("CTED.CatalogoCursos.Models.Modulo", b =>
+                {
+                    b.Navigation("Aulas");
                 });
 #pragma warning restore 612, 618
         }

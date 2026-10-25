@@ -21,9 +21,7 @@ public class CursoService
         string? modalidade,
         string? status)
     {
-        var consulta = _context.Cursos
-            .AsNoTracking()
-            .AsQueryable();
+        var consulta = CriarConsultaCompleta();
 
         if (!string.IsNullOrWhiteSpace(categoria))
         {
@@ -54,7 +52,47 @@ public class CursoService
             ).ToList();
         }
 
+        OrdenarConteudo(cursos);
+
         return cursos;
+    }
+
+    public async Task<Curso?> ObterPorIdAsync(int id)
+    {
+        var curso = await CriarConsultaCompleta()
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (curso is not null)
+        {
+            OrdenarConteudo(new[] { curso });
+        }
+
+        return curso;
+    }
+
+    private IQueryable<Curso> CriarConsultaCompleta()
+    {
+        return _context.Cursos
+            .AsNoTracking()
+            .Include(curso => curso.Modulos)
+                .ThenInclude(modulo => modulo.Aulas);
+    }
+
+    private static void OrdenarConteudo(IEnumerable<Curso> cursos)
+    {
+        foreach (var curso in cursos)
+        {
+            curso.Modulos = curso.Modulos
+                .OrderBy(modulo => modulo.Ordem)
+                .ToList();
+
+            foreach (var modulo in curso.Modulos)
+            {
+                modulo.Aulas = modulo.Aulas
+                    .OrderBy(aula => aula.Ordem)
+                    .ToList();
+            }
+        }
     }
 
     private static string RemoverAcentos(string texto)
@@ -62,8 +100,8 @@ public class CursoService
         var normalizado = texto.Normalize(NormalizationForm.FormD);
 
         var resultado = string.Concat(
-            normalizado.Where(c =>
-                CharUnicodeInfo.GetUnicodeCategory(c)
+            normalizado.Where(caractere =>
+                CharUnicodeInfo.GetUnicodeCategory(caractere)
                 != UnicodeCategory.NonSpacingMark)
         );
 
