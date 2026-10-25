@@ -26,6 +26,7 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 
     await CursoDadosIniciais.InserirCursosAsync(db);
+    await CursoConteudoInicial.InserirConteudoAsync(db);
 }
 
 // Disponibiliza a documentação no ambiente de desenvolvimento.

@@ -14,7 +14,8 @@ Verificações confirmadas nesta etapa:
 
 Pendências conhecidas:
 
-- Os módulos e as aulas ainda não estão cadastrados nos cursos.
+- Os seis cursos possuem conteúdo inicial cadastrado, com 3 módulos e 6 aulas por curso.
+- API de detalhes validada para os cursos 1 e 6; página de detalhes do curso 6 conferida no navegador.
 - O conteúdo programático precisa ser validado antes de ser apresentado como oficial.
 - A publicação da aplicação na internet e a revisão final dos requisitos de entrega ainda precisam ser verificadas.
 EOF
