@@ -124,3 +124,24 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
+
+<script>
+  (() => {
+    const header = document.querySelector('.site-header');
+    const logo = document.querySelector('.site-header .brand img');
+
+    if (!header || !logo) return;
+
+    const updateHeader = () => {
+      const scrolled = window.scrollY > 40;
+      header.classList.toggle('header-scrolled', scrolled);
+
+      logo.src = scrolled
+        ? '/assets/images/logo-sesi-industria-primary.svg'
+        : '/assets/images/logo-sesi-industria-white.svg';
+    };
+
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+  })();
+</script>

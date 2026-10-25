@@ -107,3 +107,64 @@
 .detail-error p:not(.eyebrow){color:var(--muted);font-size:13px;margin:10px 0 22px}
 @media(max-width:760px){.course-detail-main>.detail-page{width:calc(100% - 36px);padding-top:23px;padding-bottom:40px}.course-detail-main .detail-main-grid{grid-template-columns:1fr;gap:25px}.course-detail-main .detail-video{height:clamp(190px,55vw,290px)}.course-detail-main .detail-feature-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.course-detail-main .detail-bottom-cta{align-items:flex-start;flex-direction:column}.course-detail-main .detail-course-bar{align-items:flex-start;flex-direction:column;gap:7px}}
 @media(max-width:480px){.course-detail-main>.detail-page{width:calc(100% - 30px);padding-top:18px}.course-detail-main .detail-meta-grid{grid-template-columns:1fr 1fr;gap:12px 8px}.course-detail-main .detail-meta-icon{width:27px;height:27px}.course-detail-main .detail-meta-item strong{font-size:10px}.course-detail-main .detail-feature-strip{gap:13px 9px}.course-detail-main .detail-feature-strip article{align-items:flex-start}.course-detail-main .detail-feature-strip small{font-size:8px}.course-accordion summary{padding:13px 12px;gap:9px}.module-title-row h4,.module-summary-title{font-size:11px}}
+
+/* Cabeçalho sobre o banner vermelho do protótipo */
+body:not(.course-detail-body) .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+body:not(.course-detail-body) .site-header .main-nav > a:not(.nav-cta) {
+  color: #fff;
+}
+
+body:not(.course-detail-body) .site-header .nav-cta {
+  color: #fff;
+  border-color: rgba(255, 255, 255, .7);
+  background: transparent;
+}
+
+body:not(.course-detail-body) .site-header .menu-toggle {
+  color: #fff;
+}
+
+body:not(.course-detail-body) .site-header.header-scrolled {
+  background: #fff;
+  border-bottom: 1px solid #eee5e1;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, .06);
+}
+
+body:not(.course-detail-body) .site-header.header-scrolled .main-nav > a:not(.nav-cta) {
+  color: #393333;
+}
+
+body:not(.course-detail-body) .site-header.header-scrolled .nav-cta {
+  color: #393333;
+  border-color: #d9d3d0;
+}
+
+body:not(.course-detail-body) .site-header.header-scrolled .menu-toggle {
+  color: #171515;
+}
+
+/* Vermelho uniforme por cima da foto, mantendo a imagem visível */
+.hero-overlay {
+  background: rgba(166, 0, 10, .68);
+  mix-blend-mode: normal;
+}
+
+.hero:after {
+  background: linear-gradient(
+    90deg,
+    rgba(166, 0, 10, .22),
+    rgba(166, 0, 10, .12)
+  );
+}
