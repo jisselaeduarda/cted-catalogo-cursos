@@ -20,3 +20,9 @@ secrets.json
 .DS_Store
 Thumbs.db
 wwwroot/js/app.js~
+# Arquivos gerados pelo .NET
+**/bin/
+**/obj/
+
+# Backup local
+backup-ajuste-detalhes/
