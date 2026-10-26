@@ -1,10 +1,9 @@
-
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>CTED.CatalogoCursos_</RootNamespace>
+    <RootNamespace>CTED.CatalogoCursos</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,9 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="backup-*/**/*.cs" />
-    <Compile Remove="tests/**/*.cs" />
-    <Content Remove="tests/**" />
-    <None Remove="tests/**" />
+    <FrontendFiles Include="../frontend/**/*" />
   </ItemGroup>
+
+  <Target Name="CopyFrontendToPublish" AfterTargets="Publish">
+    <Copy
+      SourceFiles="@(FrontendFiles)"
+      DestinationFiles="@(FrontendFiles->'$(PublishDir)wwwroot/%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
 </Project>

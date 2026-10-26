@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - refactor/arquitetura-clean-code
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore backend/CTED.CatalogoCursos.csproj
+
+      - name: Build
+        run: dotnet build backend/CTED.CatalogoCursos.csproj --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test tests/CTED.CatalogoCursos.Tests/CTED.CatalogoCursos.Tests.csproj --configuration Release
+
+      - name: Publish
+        run: dotnet publish backend/CTED.CatalogoCursos.csproj --no-build --configuration Release --output ./publish /p:UseAppHost=false
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check frontend/js/app.js
+          node --check frontend/js/curso.js
+
+      - name: Start application
+        run: |
+          dotnet run --project backend/CTED.CatalogoCursos.csproj --no-build --configuration Release --urls http://127.0.0.1:5046 > app.log 2>&1 &
+          echo $! > app.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5046/api/cursos > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat app.log
+          exit 1
+
+      - name: Smoke test API
+        run: |
+          curl --fail http://127.0.0.1:5046/api/cursos
+          curl --fail http://127.0.0.1:5046/api/cursos/1
+
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f app.pid ]; then kill "$(cat app.pid)" || true; fi
+
+      - name: Docker build
+        run: docker build .
