@@ -1,126 +1,116 @@
-
 # Uso de Inteligência Artificial — CTED
 
 ## 1. Ferramenta utilizada
 
-Foi utilizado o ChatGPT como ferramenta de apoio ao desenvolvimento do projeto CTED — Catálogo de Cursos.
+Foi utilizado o ChatGPT como ferramenta de apoio à revisão e refatoração do case CTED — Catálogo de Cursos.
 
-A ferramenta auxiliou na implementação e revisão do frontend, na compreensão do backend e da API, na organização dos arquivos, na identificação de problemas e na elaboração da documentação técnica.
-
-O desenvolvimento, a execução dos comandos e a verificação da interface foram realizados no ambiente local do projeto.
+A IA foi utilizada como apoio técnico. As decisões foram comparadas com o código real, com o enunciado do case e com as validações executadas no GitHub Actions.
 
 ## 2. Objetivos do uso de IA
 
-A inteligência artificial foi utilizada para:
+A ferramenta foi utilizada para:
 
-- Apoiar a construção da interface com HTML, CSS e JavaScript.
-- Implementar a consulta à API e a utilização dos filtros.
-- Melhorar a responsividade e a navegação por teclado.
-- Implementar a abertura dos detalhes de um curso.
-- Corrigir problemas encontrados durante a execução.
-- Preparar a documentação técnica do projeto.
+- diagnosticar a estrutura existente;
+- propor uma arquitetura simples e explicável;
+- separar frontend e backend sem criar dois deploys;
+- revisar o fluxo da API e do Entity Framework Core;
+- reduzir payload da listagem;
+- consolidar o seed;
+- remover duplicações e código morto do frontend;
+- conectar pesquisa e filtros à API;
+- simplificar a página de detalhes;
+- preparar testes, CI e documentação;
+- revisar aderência aos requisitos do case.
 
-## 3. Exemplos de prompts utilizados
+## 3. Prompt principal
 
-Os exemplos abaixo resumem as solicitações realizadas durante o desenvolvimento.
+O trabalho foi orientado por um prompt de revisão arquitetural que estabeleceu, entre outros pontos:
 
-### Frontend e responsividade
+- não alterar diretamente a `main`;
+- criar memória da refatoração;
+- evitar overengineering;
+- manter Minimal API + Service + EF Core;
+- separar `frontend/` e `backend/`;
+- manter um único deploy;
+- validar cada fase antes de avançar;
+- remover duplicações e hotfixes;
+- garantir pesquisa, filtros e detalhes;
+- atualizar README e documentação de IA;
+- não declarar sucesso sem validação real.
 
-"Oriente a construção do catálogo de cursos conforme o protótipo, com filtros, cartões, responsividade e acesso aos detalhes."
+## 4. Sugestões aproveitadas
 
-**Resultado utilizado:** estrutura de consulta dos cursos, filtros e apresentação dos cartões.
+Foram aproveitadas sugestões para:
 
-### Integração com a API
+- manter a arquitetura `Endpoint → Service → DbContext → SQLite`;
+- separar fisicamente frontend e backend;
+- manter ASP.NET Core como host do frontend e da API;
+- criar DTOs simples para diferenciar listagem e detalhe;
+- carregar módulos e aulas somente no endpoint de detalhe;
+- consolidar o seed em `Data/Seed/CursoSeed.cs`;
+- renomear `Models/Cursos.cs` para `Models/Curso.cs`;
+- modularizar JavaScript em `api.js`, `ui.js`, `catalogo.js` e `curso.js`;
+- utilizar diretamente o contrato camelCase da API;
+- remover o modal duplicado e o uso de `sessionStorage` no detalhe;
+- implementar busca e filtros através da própria API;
+- criar testes com SQLite em memória;
+- criar uma esteira de CI com build, testes, execução, smoke tests e Docker.
 
-"Implemente a consulta à API de cursos e permita combinar busca por nome, categoria, modalidade e status."
+## 5. Sugestões rejeitadas ou ajustadas
 
-**Resultado utilizado:** requisições ao endpoint `/api/cursos` com os parâmetros de consulta.
+### Arquitetura excessiva
 
-### Navegação do catálogo
+Foram consideradas possíveis abstrações adicionais, como Repository Pattern e interfaces apenas por convenção. Elas foram descartadas porque o Entity Framework Core já fornece a abstração necessária de persistência e o escopo do case não justifica camadas extras.
 
-"Adapte os cartões para ficarem lado a lado e permita navegar pelos cursos com setas de carrossel, preservando a funcionalidade dos filtros."
+### Reescrever todo o CSS principal
 
-**Resultado utilizado:** layout responsivo e controles de navegação do catálogo.
+Durante a revisão, uma possibilidade considerada foi reescrever o stylesheet principal para remover de uma vez todas as regras antigas. A abordagem foi considerada inadequada neste momento porque aumentaria o risco de regressão visual sem uma comparação automatizada com o Figma.
 
-### Tratamento de erros
+A correção foi preservar `styles.css`, remover as cópias físicas duplicadas e isolar apenas os estilos dos novos controles de catálogo em `catalog.css`.
 
-"Ajude a identificar por que as imagens não carregam e corrija os caminhos utilizando os arquivos existentes no projeto."
+### Frontend tolerante a vários formatos de API
 
-**Resultado utilizado:** identificação de caminhos inválidos e atualização das referências para os recursos disponíveis.
+A implementação anterior aceitava diferentes aliases para o mesmo campo, como `nomeCompleto`, `NomeCompleto`, `nome`, `titulo` e `title`.
 
-### Documentação
+Essa estratégia foi removida porque o frontend e o backend pertencem à mesma solução e possuem um contrato conhecido. O código passou a utilizar um único contrato camelCase.
 
-"Documente as tecnologias, a arquitetura, a execução local, os endpoints da API, os testes e as limitações do projeto."
+## 6. Como as sugestões foram validadas
 
-**Resultado utilizado:** elaboração deste README e deste relatório de uso de IA.
+A refatoração não foi considerada correta apenas porque foi gerada pela IA.
 
-## 4. Sugestões aceitas e ajustadas
+Após cada bloco de alterações, o GitHub Actions executou:
 
-Foram aproveitadas sugestões relacionadas a:
+- `dotnet restore`;
+- `dotnet build`;
+- testes xUnit;
+- `dotnet publish`;
+- verificação de sintaxe dos módulos JavaScript;
+- inicialização real da aplicação;
+- smoke tests da home, detalhes e API;
+- pesquisa e filtros combinados;
+- verificação de arquivos estáticos;
+- `docker build`.
 
-- Organização do HTML e do CSS.
-- Consulta à API usando `fetch`.
-- Aplicação combinada dos filtros.
-- Uso de mensagens para carregamento, resultados vazios e falhas.
-- Implementação do carrossel e da navegação pelos detalhes.
-- Uso de atributos de acessibilidade e navegação por teclado.
-- Documentação do projeto e das formas de execução local.
+As alterações estruturais, de backend e de frontend tiveram CI verde antes do avanço para a etapa seguinte.
 
-As sugestões foram aplicadas ao projeto e avaliadas por meio da execução local.
+## 7. Exemplo de inadequação da IA e correção
 
-## 5. Sugestões rejeitadas ou corrigidas
+Uma abordagem inicialmente considerada durante a revisão foi substituir integralmente o CSS existente por um stylesheet reestruturado. Embora isso produzisse um arquivo mais limpo, a alteração teria uma superfície visual grande demais para o momento do case e poderia prejudicar a fidelidade ao protótipo.
 
-### Botão de detalhes nos cartões
-
-Uma primeira implementação incluía um botão "Ver detalhes" em cada cartão. Após comparar a interface com o protótipo fornecido, essa abordagem foi substituída pela abertura dos detalhes ao clicar no cartão, mantendo a navegação por teclado.
-
-### Caminhos de imagens inexistentes
-
-Inicialmente, o frontend tentava carregar arquivos JPG com nomes que não existiam em `wwwroot/images`, produzindo respostas HTTP 404.
-
-A pasta foi inspecionada e os caminhos foram ajustados para utilizar arquivos existentes do material institucional, como `hero-image.png`, `banner-ava.png` e `video-thumb.png`.
-
-Essas imagens são recursos gerais da plataforma e não imagens individuais de todos os cursos. Essa limitação foi registrada na documentação.
-
-### Ajustes de cores
-
-Algumas alterações de CSS modificaram cores do cabeçalho e dos cartões de maneira diferente do protótipo. As regras foram ajustadas para recuperar o fundo vermelho do cabeçalho e preservar a identidade visual escolhida.
-
-## 6. Validação das sugestões
-
-As sugestões não foram consideradas corretas apenas por terem sido geradas pela ferramenta. Foram verificadas durante a implementação.
-
-Validações realizadas:
-
-- Execução de `dotnet build`, concluída com sucesso.
-- Consulta à API de cursos.
-- Verificação do filtro por categoria.
-- Verificação da combinação de categoria e modalidade.
-- Pesquisa por nome.
-- Filtro por status.
-- Inspeção do layout dos cartões no navegador.
-- Teste da interface em largura de celular.
-- Teste da abertura dos detalhes e do retorno à lista.
-- Verificação dos recursos de imagem disponíveis no projeto.
-
-## 7. Erro identificado e correção
-
-Um dos problemas identificados ocorreu quando o frontend tentava carregar imagens JPG que não estavam presentes na pasta pública do projeto.
-
-O navegador retornava `404 (Not Found)` para essas URLs.
-
-Para corrigir o problema, foi executada uma listagem dos arquivos disponíveis em `wwwroot/images` e uma busca por imagens na pasta Downloads. Depois disso, as referências do frontend foram ajustadas para utilizar os arquivos encontrados.
-
-Essa correção permitiu exibir imagens disponíveis, embora ainda não existam imagens individuais para cada curso.
+A decisão humana foi reduzir o escopo: manter as regras visuais existentes que já funcionavam, eliminar apenas arquivos duplicados e adicionar os estilos dos novos filtros separadamente. Essa escolha priorizou segurança da entrega e facilidade de explicação.
 
 ## 8. Participação humana
 
-As sugestões foram revisadas e aplicadas durante o desenvolvimento, com execução dos comandos, inspeção dos arquivos e testes no navegador.
+A participação humana permanece necessária para:
 
-A comparação com o protótipo, as decisões de interface e a validação final continuam dependendo da avaliação humana.
+- confirmar a fidelidade visual final ao Figma;
+- revisar comportamento em navegadores e dispositivos reais;
+- realizar auditoria manual de acessibilidade;
+- escolher e configurar a hospedagem gratuita;
+- apresentar e justificar as decisões técnicas na entrevista.
 
-## 9. Limitações
+## 9. Limitações do uso de IA
 
-A IA pode sugerir código ou caminhos de arquivos que não correspondam ao estado real do projeto. Por isso, foi necessário verificar os arquivos existentes e corrigir sugestões incompatíveis.
+A IA pode sugerir abstrações, caminhos de arquivos ou mudanças maiores do que o necessário. Por isso, cada proposta precisa ser comparada com o estado real do repositório e com os requisitos do case.
 
-A documentação deve ser atualizada se houver mudanças nos recursos visuais, na API, na estrutura do projeto ou no ambiente de publicação.
+Neste projeto, a prioridade adotada foi: requisito obrigatório, funcionamento, fidelidade visual, clareza do código e somente depois melhorias opcionais.

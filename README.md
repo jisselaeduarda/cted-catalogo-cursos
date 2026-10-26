@@ -1,144 +1,203 @@
 # CTED — Catálogo de Cursos
 
-Aplicação web de catálogo de cursos de qualificação profissional para a indústria, desenvolvida como parte do processo seletivo para Desenvolvedor de Sistemas I.
+Aplicação web desenvolvida para o case técnico de Desenvolvedor de Sistemas I. O projeto apresenta um catálogo de cursos fictícios, com API REST, persistência em banco de dados e interface responsiva.
 
-**Repositório:** https://github.com/jisselaeduarda/cted-catalogo-cursos
+## Tecnologias
 
-## Tecnologias utilizadas
+- **Backend:** C#, ASP.NET Core Minimal API e .NET 10
+- **Persistência:** Entity Framework Core e SQLite
+- **Frontend:** HTML5, CSS3 e JavaScript ES Modules
+- **Testes:** xUnit
+- **Execução e entrega:** Docker e GitHub Actions
 
-- C# e ASP.NET Core com .NET 10.
-- Entity Framework Core.
-- SQLite para persistência dos dados.
-- HTML, CSS e JavaScript no frontend.
-- Git e GitHub para controle de versão.
-- Docker para empacotamento e publicação em ambiente compatível.
+## Arquitetura
+
+O frontend e o backend fazem parte da mesma aplicação, permitindo disponibilizar a interface e a API em um único deploy.
+
+```text
+Navegador
+    |
+    v
+Frontend (HTML, CSS e JavaScript)
+    |
+    v
+API REST — ASP.NET Core Minimal API
+    |
+    v
+CursoEndpoints
+    |
+    v
+CursoService
+    |
+    v
+CursoDbContext — Entity Framework Core
+    |
+    v
+SQLite
+```
+
+A separação entre endpoints, serviços, modelos e DTOs mantém as responsabilidades organizadas sem adicionar camadas desnecessárias ao escopo do projeto.
 
 ## Funcionalidades
 
-- Listagem dos cursos cadastrados.
-- Pesquisa de cursos por nome.
-- Filtros por categoria, modalidade e status.
-- Combinação de critérios de pesquisa.
-- Cartões de cursos em carrossel.
-- Página de detalhes com descrição, carga horária, modalidade e público-alvo.
-- Apresentação dos módulos e das aulas cadastradas.
-- Mensagens para carregamento, falha de consulta e ausência de resultados.
-- Layout responsivo e controles básicos de acessibilidade.
+- Exibição do catálogo de cursos.
+- Pesquisa de cursos pela interface.
+- Página de detalhes de cada curso.
+- Organização dos cursos em módulos e aulas.
+- Tratamento de estados de carregamento, ausência de resultados e erros.
+- Interface responsiva para diferentes tamanhos de tela.
+- Persistência dos dados com SQLite.
+- Dados fictícios para demonstração e testes.
 
-A aplicação utiliza dados fornecidos pela API. Os filtros disponíveis na interface são aplicados aos cursos carregados pelo frontend.
+O projeto utiliza cursos fictícios para fins de demonstração, sem representar uma oferta real de cursos.
 
 ## Estrutura do projeto
 
-- `Program.cs`: configuração da aplicação e dos endpoints.
-- `Data/`: contexto do Entity Framework Core e dados iniciais.
-- `Models/`: entidades utilizadas no catálogo.
-- `wwwroot/index.html`: página inicial e catálogo.
-- `wwwroot/curso.html`: página de detalhes do curso.
-- `wwwroot/css/styles.css`: estilos principais do frontend.
-- `wwwroot/js/app.js`: carregamento dos cursos, carrossel e filtros.
-- `wwwroot/js/curso.js`: carregamento e apresentação dos detalhes.
-- `wwwroot/assets/images/`: imagens e ícones utilizados pela interface.
-- `Dockerfile`: configuração para construção da imagem da aplicação.
-- `USO_DE_IA.md`: documentação do apoio de inteligência artificial.
-
-## Requisitos para execução
-
-- SDK do .NET 10.
-- Git, caso o projeto seja clonado do repositório.
+```text
+CTED.CatalogoCursos/
+├── backend/
+│   ├── Data/
+│   │   └── Seed/
+│   ├── DTOs/
+│   ├── Endpoints/
+│   ├── Migrations/
+│   ├── Models/
+│   ├── Services/
+│   └── Program.cs
+├── frontend/
+│   ├── assets/
+│   ├── css/
+│   ├── js/
+│   │   ├── api.js
+│   │   ├── catalogo.js
+│   │   ├── curso.js
+│   │   └── ui.js
+│   ├── curso.html
+│   └── index.html
+├── tests/
+├── docs/
+├── Dockerfile
+├── README.md
+└── USO_DE_IA.md
+```
 
 ## Como executar localmente
 
-Clone o repositório:
+### Pré-requisitos
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- Git
+
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/jisselaeduarda/cted-catalogo-cursos.git
-cd cted-catalogo-cursos/CTED.CatalogoCursos
+cd cted-catalogo-cursos
+git checkout feat/refactor
 ```
 
-Restaure as dependências:
+### 2. Restaurar as dependências
 
 ```bash
-dotnet restore
+dotnet restore backend/CTED.CatalogoCursos.csproj
 ```
 
-Compile a aplicação:
+### 3. Compilar o projeto
 
 ```bash
-dotnet build
+dotnet build backend/CTED.CatalogoCursos.csproj
 ```
 
-Execute localmente:
+### 4. Executar os testes
 
 ```bash
-dotnet run --urls http://localhost:5046
+dotnet test tests/CTED.CatalogoCursos.Tests/CTED.CatalogoCursos.Tests.csproj
 ```
 
-Acesse no navegador:
+### 5. Iniciar a aplicação
 
-- Aplicação: http://localhost:5046
-- Listagem da API: http://localhost:5046/api/cursos
-- Detalhes de um curso: http://localhost:5046/api/cursos/1
-
-A base SQLite e os dados iniciais são gerenciados pela aplicação conforme sua configuração. Para conferir os dados efetivamente utilizados, execute a aplicação e consulte os endpoints.
-
-## API
-
-### `GET /api/cursos`
-
-Retorna a lista de cursos. A API aceita os parâmetros de pesquisa e filtragem implementados no backend:
-
-- `busca`: pesquisa textual.
-- `categoria`: filtra por categoria.
-- `modalidade`: filtra por modalidade.
-- `status`: filtra por status.
-
-Exemplo:
-
-```text
-/api/cursos?categoria=Tecnologia&modalidade=Online
+```bash
+dotnet run --project backend/CTED.CatalogoCursos.csproj --urls http://localhost:5046
 ```
 
-### `GET /api/cursos/{id}`
+Acesse a aplicação em:
 
-Retorna os dados de um curso específico, incluindo os módulos e as aulas cadastradas, quando disponíveis.
+- Catálogo: http://localhost:5046
+- API de cursos: http://localhost:5046/api/cursos
+- Detalhes de um curso: http://localhost:5046/curso.html?id=1
+
+## API REST
+
+### Listar cursos
+
+`GET /api/cursos`
+
+Retorna os cursos disponíveis na API.
+
+### Consultar detalhes de um curso
+
+`GET /api/cursos/{id}`
+
+Retorna os detalhes do curso solicitado, incluindo seus módulos e aulas. Um identificador inexistente deve retornar uma resposta HTTP 404.
 
 ## Modelo de dados
 
-O catálogo utiliza entidades para cursos, módulos e aulas. Cada curso pode possuir módulos, e cada módulo pode possuir aulas. O relacionamento permite organizar o conteúdo programático na página de detalhes.
+A estrutura relacional utiliza três entidades principais:
 
-Os cursos e conteúdos iniciais são destinados à demonstração do funcionamento da aplicação. As informações não devem ser interpretadas como oferta oficial de cursos do SESI.
+- **Curso:** informações gerais do curso.
+- **Módulo:** unidades que organizam o conteúdo de um curso.
+- **Aula:** conteúdos pertencentes a cada módulo.
 
-## Acessibilidade e responsividade
+Relacionamento:
 
-O frontend utiliza HTML semântico, links de navegação, identificação de botões, controles de teclado e estilos adaptáveis a diferentes tamanhos de tela. A validação visual final deve considerar desktop e dispositivos móveis.
+```text
+Curso 1 ─── N Módulo 1 ─── N Aula
+```
+
+Os DTOs permitem separar os dados retornados na listagem dos dados detalhados de um curso.
+
+## Banco de dados e migrations
+
+O projeto utiliza SQLite com Entity Framework Core. As migrations versionam as alterações do modelo de dados, enquanto o seed disponibiliza dados fictícios para a demonstração.
+
+A configuração da conexão está nos arquivos de configuração do backend. Em execução local, verifique a connection string antes de iniciar a aplicação.
+
+## Docker
+
+Para construir a imagem:
+
+```bash
+docker build -t cted-catalogo-cursos .
+```
+
+Para executar o container:
+
+```bash
+docker run --rm -p 10000:10000 cted-catalogo-cursos
+```
+
+A disponibilidade do container depende de a imagem ser construída e executada com sucesso no ambiente utilizado.
+
+## Testes e validação
+
+A suíte automatizada utiliza xUnit.
+
+Validação executada durante a preparação desta entrega:
+
+- `dotnet test`: **2 testes aprovados, 0 falhas**.
+
+A validação local não substitui a conferência do pipeline de CI, da publicação ou do comportamento visual nos navegadores.
 
 ## Uso de inteligência artificial
 
-O arquivo `USO_DE_IA.md` registra como o ChatGPT foi utilizado como ferramenta de apoio, com exemplos de solicitações, ajustes e limitações identificadas durante o desenvolvimento.
+O ChatGPT foi utilizado como ferramenta de apoio à análise, revisão, refatoração e documentação do projeto.
 
-## Testes e validações
+As decisões técnicas foram avaliadas considerando o código existente, os requisitos do case e as validações realizadas. A documentação detalhada está em [`USO_DE_IA.md`](USO_DE_IA.md).
 
-Na revisão realizada em 25/10/2026, foram confirmados:
+## Documentação adicional
 
-- Compilação do projeto com `dotnet build`.
-- Verificação de sintaxe dos arquivos JavaScript com `node --check`.
-- Verificação das alterações com `git diff --check`.
-- Consulta aos cursos pela API.
-- Abertura local da home e dos detalhes dos cursos.
-- Teste dos botões de busca e filtragem no navegador.
+Consulte a pasta [`docs/`](docs/) para os documentos técnicos e registros complementares disponíveis no repositório.
 
-Esses testes não substituem uma validação completa de todos os cenários, navegadores e tamanhos de tela.
+## Status da entrega
 
-## Limitações conhecidas
-
-- A matrícula online não está integrada.
-- O contato exibido na interface é demonstrativo e não envia mensagens.
-- As imagens compartilhadas são ilustrativas e não representam necessariamente cada curso.
-- O conteúdo programático inicial precisa ser validado antes de ser apresentado como conteúdo oficial.
-- A publicação pública e a URL definitiva de acesso precisam ser confirmadas.
-
-## Publicação
-
-O projeto inclui um `Dockerfile` baseado no .NET 10, configurado para executar a aplicação na porta `10000`. A publicação depende de uma plataforma compatível, da configuração do ambiente e da validação da persistência SQLite no ambiente hospedado.
-
-**Status:** execução local validada; publicação pública ainda pendente de confirmação.
+Projeto em preparação para entrega do case técnico. A publicação e a validação visual final devem ser conferidas separadamente antes de serem consideradas concluídas.
