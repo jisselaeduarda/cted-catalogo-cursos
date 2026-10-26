@@ -1,12 +1,13 @@
-
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY CTED.CatalogoCursos.csproj ./
-RUN dotnet restore CTED.CatalogoCursos.csproj
+COPY backend/CTED.CatalogoCursos.csproj backend/
+RUN dotnet restore backend/CTED.CatalogoCursos.csproj
 
-COPY . ./
-RUN dotnet publish CTED.CatalogoCursos.csproj \
+COPY backend/ backend/
+COPY frontend/ frontend/
+
+RUN dotnet publish backend/CTED.CatalogoCursos.csproj \
     -c Release \
     -o /app/publish \
     /p:UseAppHost=false
