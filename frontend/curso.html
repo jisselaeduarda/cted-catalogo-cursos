@@ -7,10 +7,11 @@
   <meta name="theme-color" content="#b30812">
   <title>Detalhes do curso | SESI + Indústria</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <script src="/js/curso.js" defer></script>
+  <script type="module" src="/js/curso.js"></script>
 </head>
 <body class="course-detail-body">
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="/index.html#inicio" aria-label="SESI + Indústria, início">
@@ -28,7 +29,7 @@
 
   <main id="conteudo" class="course-detail-main">
     <div id="course-detail-root" class="detail-page" aria-live="polite" aria-busy="true">
-      <p class="state-message">Carregando os detalhes do curso...</p>
+      <p class="state-message" role="status">Carregando os detalhes do curso...</p>
     </div>
   </main>
 
@@ -44,6 +45,7 @@
     </div>
     <div class="footer-bottom section-wrap"><span>© <span id="current-year">2026</span> SESI + Indústria</span><span>Educação que transforma.</span></div>
   </footer>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

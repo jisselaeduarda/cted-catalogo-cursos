@@ -33,7 +33,9 @@ jobs:
 
       - name: Validate JavaScript syntax
         run: |
-          node --check frontend/js/app.js
+          node --check frontend/js/api.js
+          node --check frontend/js/ui.js
+          node --check frontend/js/catalogo.js
           node --check frontend/js/curso.js
 
       - name: Start application
@@ -49,10 +51,20 @@ jobs:
           cat app.log
           exit 1
 
-      - name: Smoke test API
+      - name: Smoke test application and API
         run: |
+          curl --fail http://127.0.0.1:5046/
+          curl --fail http://127.0.0.1:5046/curso.html?id=1
           curl --fail http://127.0.0.1:5046/api/cursos
           curl --fail http://127.0.0.1:5046/api/cursos/1
+          curl --fail --get http://127.0.0.1:5046/api/cursos \
+            --data-urlencode "busca=industria" \
+            --data-urlencode "categoria=Tecnologia" \
+            --data-urlencode "modalidade=Online" \
+            --data-urlencode "status=Disponível"
+          curl --fail http://127.0.0.1:5046/assets/images/industria-4-0.jpg
+          curl --fail http://127.0.0.1:5046/css/styles.css
+          curl --fail http://127.0.0.1:5046/js/catalogo.js
 
       - name: Stop application
         if: always()
