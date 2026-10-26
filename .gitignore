@@ -1,9 +1,8 @@
+# .NET
+**/bin/
+**/obj/
 
-# Arquivos gerados pelo .NET
-bin/
-obj/
-
-# Banco de dados local
+# Banco SQLite local
 *.db
 *.db-shm
 *.db-wal
@@ -14,15 +13,13 @@ obj/
 !.env.example
 secrets.json
 
-# Arquivos do sistema e editor
+# IDE e sistema operacional
 .vs/
 .vscode/
 .DS_Store
 Thumbs.db
-wwwroot/js/app.js~
-# Arquivos gerados pelo .NET
-**/bin/
-**/obj/
 
-# Backup local
-backup-ajuste-detalhes/
+# Artefatos locais
+publish/
+*.zip
+backup-*/

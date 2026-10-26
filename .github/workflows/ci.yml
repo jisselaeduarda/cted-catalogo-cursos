@@ -31,6 +31,18 @@ jobs:
       - name: Publish
         run: dotnet publish backend/CTED.CatalogoCursos.csproj --no-build --configuration Release --output ./publish /p:UseAppHost=false
 
+      - name: Create publish ZIP
+        run: |
+          cd publish
+          zip -r ../cted-catalogo-cursos-publish.zip .
+
+      - name: Upload publish artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cted-catalogo-cursos-publish
+          path: cted-catalogo-cursos-publish.zip
+          if-no-files-found: error
+
       - name: Validate JavaScript syntax
         run: |
           node --check frontend/js/api.js
