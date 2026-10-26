@@ -1,4 +1,5 @@
 using CTED.CatalogoCursos.Data;
+using CTED.CatalogoCursos.Data.Seed;
 using CTED.CatalogoCursos.Endpoints;
 using CTED.CatalogoCursos.Services;
 using Microsoft.Data.Sqlite;
@@ -30,8 +31,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CursoDbContext>();
     db.Database.Migrate();
-    await CursoDadosIniciais.InserirCursosAsync(db);
-    await CursoConteudoInicial.InserirConteudoAsync(db);
+    await CursoSeed.InserirAsync(db);
 }
 
 if (app.Environment.IsDevelopment())

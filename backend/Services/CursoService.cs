@@ -1,8 +1,9 @@
-using CTED.CatalogoCursos.Data;
-using CTED.CatalogoCursos.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using CTED.CatalogoCursos.Data;
+using CTED.CatalogoCursos.DTOs;
+using CTED.CatalogoCursos.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CTED.CatalogoCursos.Services;
 
@@ -15,96 +16,111 @@ public class CursoService
         _context = context;
     }
 
-    public async Task<List<Curso>> ListarTodosAsync(
+    public async Task<List<CursoResumoResponse>> ListarAsync(
         string? busca,
         string? categoria,
         string? modalidade,
         string? status)
     {
-        var consulta = CriarConsultaCompleta();
+        var consulta = _context.Cursos.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(categoria))
         {
-            consulta = consulta.Where(c => c.Categoria == categoria);
+            consulta = consulta.Where(curso => curso.Categoria == categoria);
         }
 
         if (!string.IsNullOrWhiteSpace(modalidade))
         {
-            consulta = consulta.Where(c => c.Modalidade == modalidade);
+            consulta = consulta.Where(curso => curso.Modalidade == modalidade);
         }
 
         if (!string.IsNullOrWhiteSpace(status))
         {
-            consulta = consulta.Where(c => c.Status == status);
+            consulta = consulta.Where(curso => curso.Status == status);
         }
 
-        var cursos = await consulta.ToListAsync();
+        var cursos = await consulta
+            .OrderBy(curso => curso.Id)
+            .Select(curso => new CursoResumoResponse(
+                curso.Id,
+                curso.NomeCompleto,
+                curso.NomeResumido,
+                curso.Descricao,
+                curso.Categoria,
+                curso.Modalidade,
+                curso.CargaHoraria,
+                curso.PublicoAlvo,
+                curso.Status,
+                curso.ImagemUrl,
+                curso.DataDisponibilidade))
+            .ToListAsync();
 
-        if (!string.IsNullOrWhiteSpace(busca))
+        if (string.IsNullOrWhiteSpace(busca))
         {
-            var termoBusca = RemoverAcentos(busca.Trim());
-
-            cursos = cursos.Where(c =>
-                RemoverAcentos(c.NomeCompleto)
-                    .Contains(termoBusca, StringComparison.OrdinalIgnoreCase) ||
-                RemoverAcentos(c.NomeResumido)
-                    .Contains(termoBusca, StringComparison.OrdinalIgnoreCase)
-            ).ToList();
+            return cursos;
         }
 
-        OrdenarConteudo(cursos);
+        var termo = RemoverAcentos(busca.Trim());
 
-        return cursos;
+        return cursos
+            .Where(curso =>
+                RemoverAcentos(curso.NomeCompleto)
+                    .Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                RemoverAcentos(curso.NomeResumido)
+                    .Contains(termo, StringComparison.OrdinalIgnoreCase))
+            .ToList();
     }
 
-    public async Task<Curso?> ObterPorIdAsync(int id)
+    public async Task<CursoDetalheResponse?> ObterPorIdAsync(int id)
     {
-        var curso = await CriarConsultaCompleta()
-            .FirstOrDefaultAsync(c => c.Id == id);
-
-        if (curso is not null)
-        {
-            OrdenarConteudo(new[] { curso });
-        }
-
-        return curso;
-    }
-
-    private IQueryable<Curso> CriarConsultaCompleta()
-    {
-        return _context.Cursos
+        var curso = await _context.Cursos
             .AsNoTracking()
-            .Include(curso => curso.Modulos)
-                .ThenInclude(modulo => modulo.Aulas);
-    }
+            .Include(item => item.Modulos)
+                .ThenInclude(modulo => modulo.Aulas)
+            .FirstOrDefaultAsync(item => item.Id == id);
 
-    private static void OrdenarConteudo(IEnumerable<Curso> cursos)
-    {
-        foreach (var curso in cursos)
+        if (curso is null)
         {
-            curso.Modulos = curso.Modulos
-                .OrderBy(modulo => modulo.Ordem)
-                .ToList();
-
-            foreach (var modulo in curso.Modulos)
-            {
-                modulo.Aulas = modulo.Aulas
-                    .OrderBy(aula => aula.Ordem)
-                    .ToList();
-            }
+            return null;
         }
+
+        var modulos = curso.Modulos
+            .OrderBy(modulo => modulo.Ordem)
+            .Select(modulo => new ModuloResponse(
+                modulo.Id,
+                modulo.Titulo,
+                modulo.Ordem,
+                modulo.Aulas
+                    .OrderBy(aula => aula.Ordem)
+                    .Select(aula => new AulaResponse(
+                        aula.Id,
+                        aula.Titulo,
+                        aula.Descricao,
+                        aula.Ordem))
+                    .ToList()))
+            .ToList();
+
+        return new CursoDetalheResponse(
+            curso.Id,
+            curso.NomeCompleto,
+            curso.NomeResumido,
+            curso.Descricao,
+            curso.Categoria,
+            curso.Modalidade,
+            curso.CargaHoraria,
+            curso.PublicoAlvo,
+            curso.Status,
+            curso.ImagemUrl,
+            curso.DataDisponibilidade,
+            modulos);
     }
 
     private static string RemoverAcentos(string texto)
     {
         var normalizado = texto.Normalize(NormalizationForm.FormD);
+        var caracteres = normalizado.Where(caractere =>
+            CharUnicodeInfo.GetUnicodeCategory(caractere) != UnicodeCategory.NonSpacingMark);
 
-        var resultado = string.Concat(
-            normalizado.Where(caractere =>
-                CharUnicodeInfo.GetUnicodeCategory(caractere)
-                != UnicodeCategory.NonSpacingMark)
-        );
-
-        return resultado.Normalize(NormalizationForm.FormC);
+        return string.Concat(caracteres).Normalize(NormalizationForm.FormC);
     }
 }
