@@ -151,7 +151,15 @@ Fazer a documentação refletir exatamente o código final e preparar uma entreg
 - CI atualizada para gerar ZIP do `dotnet publish` e disponibilizá-lo como artifact.
 
 ### Validação
-Aguardar CI final deste commit para confirmar também a geração do ZIP.
+Workflow CI #4: **sucesso** em restore, build, testes, publish, criação do ZIP, upload do artifact, sintaxe JavaScript, execução real, smoke tests e Docker build.
+
+Artifact confirmado:
+- nome: `cted-catalogo-cursos-publish`;
+- arquivo gerado pela CI: `cted-catalogo-cursos-publish.zip`;
+- associado ao commit `36f6da0728ce26401f6935ad2edf9855601b6230`.
+
+### Resultado
+Documentação técnica e pacote de publicação concluídos. A publicação em hospedagem pública permanece externa ao repositório.
 
 ---
 
@@ -191,7 +199,7 @@ Aguardar CI final deste commit para confirmar também a geração do ZIP.
 | README obrigatório | ATENDIDO | `README.md` |
 | USO_DE_IA.md | ATENDIDO | ferramenta, objetivo, prompts, decisões, validação e inadequação documentados |
 | Relação de arquivos de publicação | ATENDIDO | `docs/ARQUIVOS_PUBLICACAO.md` |
-| ZIP de publicação | PARCIAL | CI final configurada para gerar artifact; confirmar execução final |
+| ZIP de publicação | ATENDIDO | artifact `cted-catalogo-cursos-publish` gerado pela CI #4 |
 | Publicação gratuita | NÃO ATENDIDO | hospedagem externa ainda não configurada |
 | Limitações conhecidas | ATENDIDO | README |
 
@@ -217,6 +225,7 @@ Aguardar CI final deste commit para confirmar também a geração do ZIP.
 - [x] Docker validado
 - [x] README atualizado
 - [x] USO_DE_IA atualizado
+- [x] ZIP de publicação gerado
 - [ ] validação visual final do Figma
 - [ ] teste manual completo de responsividade
 - [ ] auditoria manual com leitor de tela
@@ -225,4 +234,4 @@ Aguardar CI final deste commit para confirmar também a geração do ZIP.
 
 ## Conclusão técnica
 
-A refatoração de código e arquitetura foi concluída de forma incremental e validada por CI. As pendências restantes são de validação visual/manual e publicação externa, não de organização estrutural ou funcionalidades obrigatórias de consulta.
+A refatoração de código e arquitetura foi concluída de forma incremental e validada por CI. O artifact de publicação também foi gerado. As pendências restantes são de validação visual/manual e publicação externa, não de organização estrutural ou funcionalidades obrigatórias de consulta.
